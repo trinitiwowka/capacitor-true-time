@@ -15,7 +15,7 @@ It has no dependency on the archived Cordova TrueTime plugin or the TrueTime Swi
 ## Install from GitHub
 
 ```bash
-npm install github:trinitiwowka/capacitor-true-time#v1.0.0
+npm install github:trinitiwowka/capacitor-true-time#v1.0.1
 npx cap sync
 ```
 
@@ -54,7 +54,7 @@ The response also carries a stable implementation name, version, and identifier 
 const info = await TrueTime.getImplementationInfo();
 // {
 //   implementation: '@trinitiwowka/capacitor-true-time',
-//   implementationVersion: '1.0.0',
+//   implementationVersion: '1.0.1',
 //   signature: 'capacitor-true-time-native-sntp-v1',
 //   protocol: 'SNTPv4'
 // }
@@ -64,7 +64,7 @@ The identifier is an implementation marker, not a cryptographic signature.
 
 ## Validation and timing behavior
 
-The native clients reject short packets, unsupported NTP versions, non-server responses, unsynchronized clocks, invalid strata, missing timestamps, excessive delay, and responses whose origin timestamp does not match the request. Elapsed time during each exchange comes from the platform monotonic clock, so a wall-clock adjustment during the request does not corrupt `t3`.
+The native clients reject short packets, unsupported NTP versions, non-server responses, unsynchronized clocks, invalid strata, missing timestamps, root delay or dispersion above 100 ms, round trips of 750 ms or more, and responses whose origin timestamp does not match the request. Elapsed time during each exchange comes from the platform monotonic clock, so a wall-clock adjustment during the request does not corrupt `t3`.
 
 The caller selects the NTP host and can query several hosts, compare samples, and keep the lowest-delay result. Coordinating audio or other events on the resulting common UTC timeline remains application logic.
 
@@ -122,18 +122,20 @@ Return stable identifiers for the native code loaded by Capacitor.
 
 A validated four-timestamp SNTP sample. All timestamps are Unix milliseconds.
 
-| Prop           | Type                | Description                                    |
-| -------------- | ------------------- | ---------------------------------------------- |
-| **`callback`** | <code>number</code> | Corrected UTC time at receipt (`t3 + offset`). |
-| **`t0`**       | <code>number</code> | Client request transmission time.              |
-| **`t1`**       | <code>number</code> | Server request receipt time.                   |
-| **`t2`**       | <code>number</code> | Server response transmission time.             |
-| **`t3`**       | <code>number</code> | Client response receipt time.                  |
-| **`delay`**    | <code>number</code> | Network round-trip delay.                      |
-| **`offset`**   | <code>number</code> | Estimated local-clock offset from the server.  |
-| **`host`**     | <code>string</code> |                                                |
-| **`stratum`**  | <code>number</code> |                                                |
-| **`leap`**     | <code>number</code> |                                                |
+| Prop                 | Type                | Description                                              |
+| -------------------- | ------------------- | -------------------------------------------------------- |
+| **`callback`**       | <code>number</code> | Corrected UTC time at receipt (`t3 + offset`).           |
+| **`t0`**             | <code>number</code> | Client request transmission time.                        |
+| **`t1`**             | <code>number</code> | Server request receipt time.                             |
+| **`t2`**             | <code>number</code> | Server response transmission time.                       |
+| **`t3`**             | <code>number</code> | Client response receipt time.                            |
+| **`delay`**          | <code>number</code> | Network round-trip delay.                                |
+| **`offset`**         | <code>number</code> | Estimated local-clock offset from the server.            |
+| **`rootDelay`**      | <code>number</code> | Server root delay from its primary reference clock.      |
+| **`rootDispersion`** | <code>number</code> | Server root dispersion from its primary reference clock. |
+| **`host`**           | <code>string</code> |                                                          |
+| **`stratum`**        | <code>number</code> |                                                          |
+| **`leap`**           | <code>number</code> |                                                          |
 
 
 #### TrueTimeOptions
@@ -153,7 +155,7 @@ Identity returned by the native implementation.
 | Prop                        | Type                                              |
 | --------------------------- | ------------------------------------------------- |
 | **`implementation`**        | <code>'@trinitiwowka/capacitor-true-time'</code>  |
-| **`implementationVersion`** | <code>'1.0.0'</code>                              |
+| **`implementationVersion`** | <code>'1.0.1'</code>                              |
 | **`signature`**             | <code>'capacitor-true-time-native-sntp-v1'</code> |
 | **`protocol`**              | <code>'SNTPv4'</code>                             |
 

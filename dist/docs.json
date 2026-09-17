@@ -97,6 +97,20 @@
           "type": "number"
         },
         {
+          "name": "rootDelay",
+          "tags": [],
+          "docs": "Server root delay from its primary reference clock.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "rootDispersion",
+          "tags": [],
+          "docs": "Server root dispersion from its primary reference clock.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
           "name": "host",
           "tags": [],
           "docs": "",
@@ -161,7 +175,7 @@
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "'1.0.0'"
+          "type": "'1.0.1'"
         },
         {
           "name": "signature",

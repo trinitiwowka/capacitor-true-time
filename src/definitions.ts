@@ -9,7 +9,7 @@ export interface TrueTimeOptions {
 /** Identity returned by the native implementation. */
 export interface TrueTimeImplementationInfo {
   implementation: '@trinitiwowka/capacitor-true-time';
-  implementationVersion: '1.0.0';
+  implementationVersion: '1.0.1';
   signature: 'capacitor-true-time-native-sntp-v1';
   protocol: 'SNTPv4';
 }
@@ -30,6 +30,10 @@ export interface TrueTimeResult extends TrueTimeImplementationInfo {
   delay: number;
   /** Estimated local-clock offset from the server. */
   offset: number;
+  /** Server root delay from its primary reference clock. */
+  rootDelay: number;
+  /** Server root dispersion from its primary reference clock. */
+  rootDispersion: number;
   host: string;
   stratum: number;
   leap: number;
