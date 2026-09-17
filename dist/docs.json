@@ -1,0 +1,186 @@
+{
+  "api": {
+    "name": "TrueTimePlugin",
+    "slug": "truetimeplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "getTime",
+        "signature": "(options: TrueTimeOptions) => Promise<TrueTimeResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "TrueTimeOptions"
+          }
+        ],
+        "returns": "Promise<TrueTimeResult>",
+        "tags": [],
+        "docs": "Query an NTP server and return a validated SNTP sample.",
+        "complexTypes": [
+          "TrueTimeResult",
+          "TrueTimeOptions"
+        ],
+        "slug": "gettime"
+      },
+      {
+        "name": "getImplementationInfo",
+        "signature": "() => Promise<TrueTimeImplementationInfo>",
+        "parameters": [],
+        "returns": "Promise<TrueTimeImplementationInfo>",
+        "tags": [],
+        "docs": "Return stable identifiers for the native code loaded by Capacitor.",
+        "complexTypes": [
+          "TrueTimeImplementationInfo"
+        ],
+        "slug": "getimplementationinfo"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "TrueTimeResult",
+      "slug": "truetimeresult",
+      "docs": "A validated four-timestamp SNTP sample. All timestamps are Unix milliseconds.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "callback",
+          "tags": [],
+          "docs": "Corrected UTC time at receipt (`t3 + offset`).",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "t0",
+          "tags": [],
+          "docs": "Client request transmission time.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "t1",
+          "tags": [],
+          "docs": "Server request receipt time.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "t2",
+          "tags": [],
+          "docs": "Server response transmission time.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "t3",
+          "tags": [],
+          "docs": "Client response receipt time.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "delay",
+          "tags": [],
+          "docs": "Network round-trip delay.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "offset",
+          "tags": [],
+          "docs": "Estimated local-clock offset from the server.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "host",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "stratum",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "leap",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "TrueTimeOptions",
+      "slug": "truetimeoptions",
+      "docs": "Options for a single SNTP query.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "host",
+          "tags": [],
+          "docs": "DNS name or IP address of an NTP server.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "timeoutMs",
+          "tags": [],
+          "docs": "Query timeout in milliseconds. Values are clamped to 500...10000.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "TrueTimeImplementationInfo",
+      "slug": "truetimeimplementationinfo",
+      "docs": "Identity returned by the native implementation.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "implementation",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'@trinitiwowka/capacitor-true-time'"
+        },
+        {
+          "name": "implementationVersion",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'1.0.0'"
+        },
+        {
+          "name": "signature",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'capacitor-true-time-native-sntp-v1'"
+        },
+        {
+          "name": "protocol",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'SNTPv4'"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}
