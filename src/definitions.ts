@@ -9,7 +9,7 @@ export interface TrueTimeOptions {
 /** Identity returned by the native implementation. */
 export interface TrueTimeImplementationInfo {
   implementation: '@trinitiwowka/capacitor-true-time';
-  implementationVersion: '1.0.1';
+  implementationVersion: '1.0.2';
   signature: 'capacitor-true-time-native-sntp-v1';
   protocol: 'SNTPv4';
 }
@@ -40,7 +40,7 @@ export interface TrueTimeResult extends TrueTimeImplementationInfo {
 }
 
 export interface TrueTimePlugin {
-  /** Query an NTP server and return a validated SNTP sample. */
+  /** Query an NTP server and return a validated sample (best of four on iOS). */
   getTime(options: TrueTimeOptions): Promise<TrueTimeResult>;
 
   /** Return stable identifiers for the native code loaded by Capacitor. */

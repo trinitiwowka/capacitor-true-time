@@ -3,7 +3,7 @@ import Network
 
 enum TrueTimeIdentity {
     static let implementation = "@trinitiwowka/capacitor-true-time"
-    static let version = "1.0.1"
+    static let version = "1.0.2"
     static let signature = "capacitor-true-time-native-sntp-v1"
     static let protocolName = "SNTPv4"
 

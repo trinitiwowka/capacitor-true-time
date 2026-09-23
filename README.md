@@ -15,7 +15,7 @@ It has no dependency on the archived Cordova TrueTime plugin or the TrueTime Swi
 ## Install from GitHub
 
 ```bash
-npm install github:trinitiwowka/capacitor-true-time#v1.0.1
+npm install github:trinitiwowka/capacitor-true-time#v1.0.2
 npx cap sync
 ```
 
@@ -54,7 +54,7 @@ The response also carries a stable implementation name, version, and identifier 
 const info = await TrueTime.getImplementationInfo();
 // {
 //   implementation: '@trinitiwowka/capacitor-true-time',
-//   implementationVersion: '1.0.1',
+//   implementationVersion: '1.0.2',
 //   signature: 'capacitor-true-time-native-sntp-v1',
 //   protocol: 'SNTPv4'
 // }
@@ -66,7 +66,7 @@ The identifier is an implementation marker, not a cryptographic signature.
 
 The native clients reject short packets, unsupported NTP versions, non-server responses, unsynchronized clocks, invalid strata, missing timestamps, root delay or dispersion above 100 ms, round trips of 750 ms or more, and responses whose origin timestamp does not match the request. Elapsed time during each exchange comes from the platform monotonic clock, so a wall-clock adjustment during the request does not corrupt `t3`.
 
-The caller selects the NTP host and can query several hosts, compare samples, and keep the lowest-delay result. Coordinating audio or other events on the resulting common UTC timeline remains application logic.
+On iOS, each call checks four responses and returns the lowest-delay valid sample, following the sampling used by the earlier TrueTime.swift integration. Android makes one request per call, as the earlier Android integration did. The caller selects the NTP host and can query several hosts, compare samples, and keep the lowest-delay result. Coordinating audio or other events on the resulting common UTC timeline remains application logic.
 
 SNTP uses UDP port 123. Some networks block that traffic, so applications should use a timeout, keep more than one server available, and handle a rejected promise.
 
@@ -91,7 +91,7 @@ The web implementation reports `unavailable`; browsers do not provide raw UDP so
 getTime(options: TrueTimeOptions) => Promise<TrueTimeResult>
 ```
 
-Query an NTP server and return a validated SNTP sample.
+Query an NTP server and return a validated sample (best of four on iOS).
 
 | Param         | Type                                                        |
 | ------------- | ----------------------------------------------------------- |
@@ -155,7 +155,7 @@ Identity returned by the native implementation.
 | Prop                        | Type                                              |
 | --------------------------- | ------------------------------------------------- |
 | **`implementation`**        | <code>'@trinitiwowka/capacitor-true-time'</code>  |
-| **`implementationVersion`** | <code>'1.0.1'</code>                              |
+| **`implementationVersion`** | <code>'1.0.2'</code>                              |
 | **`signature`**             | <code>'capacitor-true-time-native-sntp-v1'</code> |
 | **`protocol`**              | <code>'SNTPv4'</code>                             |
 

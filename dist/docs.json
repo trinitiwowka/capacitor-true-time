@@ -17,7 +17,7 @@
         ],
         "returns": "Promise<TrueTimeResult>",
         "tags": [],
-        "docs": "Query an NTP server and return a validated SNTP sample.",
+        "docs": "Query an NTP server and return a validated sample (best of four on iOS).",
         "complexTypes": [
           "TrueTimeResult",
           "TrueTimeOptions"
@@ -175,7 +175,7 @@
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "'1.0.1'"
+          "type": "'1.0.2'"
         },
         {
           "name": "signature",

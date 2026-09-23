@@ -25,14 +25,36 @@ public class TrueTimePlugin: CAPPlugin, CAPBridgedPlugin {
         let requestedTimeout = call.getInt("timeoutMs") ?? 3_000
         let timeoutMs = min(max(requestedTimeout, 500), 10_000)
 
-        SNTPClient(host: host, timeout: Double(timeoutMs) / 1_000) { result in
-            switch result {
-            case .success(let sample):
-                call.resolve(sample.dictionary(host: host))
-            case .failure(let error):
-                call.reject(error.localizedDescription)
+        let group = DispatchGroup()
+        let lock = NSLock()
+        var best: TrueTimeSample?
+        var lastError: Error?
+
+        // TrueTime.swift queried each address four times and kept its fastest sample.
+        for _ in 0..<4 {
+            group.enter()
+            SNTPClient(host: host, timeout: Double(timeoutMs) / 1_000) { result in
+                lock.lock()
+                switch result {
+                case .success(let sample):
+                    if sample.delay < (best?.delay ?? .infinity) {
+                        best = sample
+                    }
+                case .failure(let error):
+                    lastError = error
+                }
+                lock.unlock()
+                group.leave()
+            }.start()
+        }
+
+        group.notify(queue: .global(qos: .userInitiated)) {
+            if let best {
+                call.resolve(best.dictionary(host: host))
+            } else {
+                call.reject(lastError?.localizedDescription ?? "No valid NTP response")
             }
-        }.start()
+        }
     }
 
     @objc func getImplementationInfo(_ call: CAPPluginCall) {
