@@ -10,9 +10,12 @@ Pod::Spec.new do |s|
   s.homepage = package['repository']['url']
   s.author = package['author']
   s.source = { :git => package['repository']['url'], :tag => s.version.to_s }
-  s.source_files = 'ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}'
+  s.source_files = 'ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}', 'ios/Vendor/TrueTime/Sources/**/*.{swift,h}'
+  s.public_header_files = 'ios/Vendor/TrueTime/Sources/CTrueTime/*.h'
+  s.preserve_paths = 'ios/Vendor/TrueTime/Sources/CTrueTime/module.modulemap'
+  s.pod_target_xcconfig = { 'SWIFT_INCLUDE_PATHS' => '$(PODS_TARGET_SRCROOT)/ios/Vendor/TrueTime/Sources/CTrueTime' }
   s.ios.deployment_target = '15.0'
   s.dependency 'Capacitor'
-  s.framework = 'Network'
+  s.frameworks = 'Network', 'SystemConfiguration'
   s.swift_version = '5.9'
 end

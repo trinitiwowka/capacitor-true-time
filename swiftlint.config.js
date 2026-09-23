@@ -3,7 +3,12 @@ const config = require('@ionic/swiftlint-config');
 
 module.exports = {
   ...config,
-  excluded: [path.join(__dirname, '.build'), path.join(__dirname, 'node_modules'), path.join(__dirname, 'example-app')],
+  excluded: [
+    path.join(__dirname, '.build'),
+    path.join(__dirname, 'node_modules'),
+    path.join(__dirname, 'example-app'),
+    path.join(__dirname, 'ios/Vendor'),
+  ],
   identifier_name: {
     min_length: 3,
     excluded: ['t0', 't1', 't2', 't3'],

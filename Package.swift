@@ -14,15 +14,21 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "CTrueTime",
+            path: "ios/Vendor/TrueTime/Sources/CTrueTime",
+            publicHeadersPath: "."),
+        .target(
+            name: "TrueTime",
+            dependencies: ["CTrueTime"],
+            path: "ios/Vendor/TrueTime/Sources",
+            exclude: ["CTrueTime"]),
+        .target(
             name: "TrueTimePlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
-                .product(name: "Cordova", package: "capacitor-swift-pm")
+                .product(name: "Cordova", package: "capacitor-swift-pm"),
+                "TrueTime"
             ],
-            path: "ios/Sources/TrueTimePlugin"),
-        .testTarget(
-            name: "TrueTimePluginTests",
-            dependencies: ["TrueTimePlugin"],
-            path: "ios/Tests/TrueTimePluginTests")
+            path: "ios/Sources/TrueTimePlugin")
     ]
 )

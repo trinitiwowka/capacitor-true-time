@@ -17,7 +17,7 @@
         ],
         "returns": "Promise<TrueTimeResult>",
         "tags": [],
-        "docs": "Query an NTP server and return a validated sample (best of four on iOS).",
+        "docs": "Get corrected time from the original TrueTime.swift client on iOS or an SNTP sample on Android.",
         "complexTypes": [
           "TrueTimeResult",
           "TrueTimeOptions"
@@ -43,14 +43,14 @@
     {
       "name": "TrueTimeResult",
       "slug": "truetimeresult",
-      "docs": "A validated four-timestamp SNTP sample. All timestamps are Unix milliseconds.",
+      "docs": "Corrected UTC and legacy-compatible timestamps in Unix milliseconds.",
       "tags": [],
       "methods": [],
       "properties": [
         {
           "name": "callback",
           "tags": [],
-          "docs": "Corrected UTC time at receipt (`t3 + offset`).",
+          "docs": "Corrected UTC time at callback on iOS or packet receipt on Android.",
           "complexTypes": [],
           "type": "number"
         },
@@ -64,14 +64,14 @@
         {
           "name": "t1",
           "tags": [],
-          "docs": "Server request receipt time.",
+          "docs": "Server request receipt time on Android; corrected callback time on iOS.",
           "complexTypes": [],
           "type": "number"
         },
         {
           "name": "t2",
           "tags": [],
-          "docs": "Server response transmission time.",
+          "docs": "Server response transmission time on Android; corrected callback time on iOS.",
           "complexTypes": [],
           "type": "number"
         },
@@ -85,7 +85,7 @@
         {
           "name": "delay",
           "tags": [],
-          "docs": "Network round-trip delay.",
+          "docs": "Network round-trip delay on Android; half the native call duration on iOS, matching the old plugin.",
           "complexTypes": [],
           "type": "number"
         },
@@ -101,14 +101,14 @@
           "tags": [],
           "docs": "Server root delay from its primary reference clock.",
           "complexTypes": [],
-          "type": "number"
+          "type": "number | undefined"
         },
         {
           "name": "rootDispersion",
           "tags": [],
           "docs": "Server root dispersion from its primary reference clock.",
           "complexTypes": [],
-          "type": "number"
+          "type": "number | undefined"
         },
         {
           "name": "host",
@@ -122,21 +122,21 @@
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "number"
+          "type": "number | undefined"
         },
         {
           "name": "leap",
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "number"
+          "type": "number | undefined"
         }
       ]
     },
     {
       "name": "TrueTimeOptions",
       "slug": "truetimeoptions",
-      "docs": "Options for a single SNTP query.",
+      "docs": "Options for native NTP time synchronization.",
       "tags": [],
       "methods": [],
       "properties": [
@@ -150,7 +150,7 @@
         {
           "name": "timeoutMs",
           "tags": [],
-          "docs": "Query timeout in milliseconds. Values are clamped to 500...10000.",
+          "docs": "Android query timeout in milliseconds, clamped to 500...10000. iOS uses TrueTime.swift's default timeout.",
           "complexTypes": [],
           "type": "number | undefined"
         }
@@ -175,7 +175,7 @@
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "'1.0.2'"
+          "type": "'1.0.3'"
         },
         {
           "name": "signature",
@@ -189,7 +189,7 @@
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "'SNTPv4'"
+          "type": "'NTPv3' | 'SNTPv4'"
         }
       ]
     }

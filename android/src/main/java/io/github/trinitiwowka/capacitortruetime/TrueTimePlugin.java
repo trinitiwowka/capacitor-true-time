@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 public class TrueTimePlugin extends Plugin {
 
     static final String IMPLEMENTATION = "@trinitiwowka/capacitor-true-time";
-    static final String VERSION = "1.0.2";
+    static final String VERSION = "1.0.3";
     static final String SIGNATURE = "capacitor-true-time-native-sntp-v1";
     static final String PROTOCOL = "SNTPv4";
 

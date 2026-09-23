@@ -1,8 +1,12 @@
 import Capacitor
 import Foundation
+#if SWIFT_PACKAGE
+import TrueTime
+#endif
 
 @objc(TrueTimePlugin)
 public class TrueTimePlugin: CAPPlugin, CAPBridgedPlugin {
+    private var isClientStarted = false
     public let identifier = "TrueTimePlugin"
     public let jsName = "TrueTime"
     public let pluginMethods: [CAPPluginMethod] = [
@@ -22,39 +26,34 @@ public class TrueTimePlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
 
-        let requestedTimeout = call.getInt("timeoutMs") ?? 3_000
-        let timeoutMs = min(max(requestedTimeout, 500), 10_000)
-
-        let group = DispatchGroup()
-        let lock = NSLock()
-        var best: TrueTimeSample?
-        var lastError: Error?
-
-        // TrueTime.swift queried each address four times and kept its fastest sample.
-        for _ in 0..<4 {
-            group.enter()
-            SNTPClient(host: host, timeout: Double(timeoutMs) / 1_000) { result in
-                lock.lock()
-                switch result {
-                case .success(let sample):
-                    if sample.delay < (best?.delay ?? .infinity) {
-                        best = sample
-                    }
-                case .failure(let error):
-                    lastError = error
-                }
-                lock.unlock()
-                group.leave()
-            }.start()
+        let client = TrueTimeClient.sharedInstance
+        if !isClientStarted {
+            client.start(pool: [host])
+            isClientStarted = true
         }
 
-        group.notify(queue: .global(qos: .userInitiated)) {
-            if let best {
-                call.resolve(best.dictionary(host: host))
-            } else {
-                call.reject(lastError?.localizedDescription ?? "No valid NTP response")
+        let t0 = Date().timeIntervalSince1970 * 1_000
+        client.fetchIfNeeded(completion: { result in
+            switch result {
+            case .success(let referenceTime):
+                let serverTime = referenceTime.now().timeIntervalSince1970 * 1_000
+                let t3 = Date().timeIntervalSince1970 * 1_000
+                var response = TrueTimeIdentity.dictionary
+                response.merge([
+                    "callback": serverTime,
+                    "t0": t0,
+                    "t1": serverTime,
+                    "t2": serverTime,
+                    "t3": t3,
+                    "delay": (t3 - t0) / 2,
+                    "offset": serverTime - t3,
+                    "host": host
+                ]) { _, new in new }
+                call.resolve(response)
+            case .failure(let error):
+                call.reject(error.localizedDescription)
             }
-        }
+        })
     }
 
     @objc func getImplementationInfo(_ call: CAPPluginCall) {
