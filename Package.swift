@@ -2,10 +2,10 @@
 import PackageDescription
 
 let package = Package(
-    name: "CapacitorRawNtp",
+    name: "TrinitiwowkaCapacitorTrueTime",
     platforms: [.iOS(.v14)],
     products: [
-        .library(name: "CapacitorRawNtp", targets: ["RawNtpPlugin"])
+        .library(name: "TrinitiwowkaCapacitorTrueTime", targets: ["RawNtpPlugin"])
     ],
     dependencies: [
         // Match your app's Capacitor major version

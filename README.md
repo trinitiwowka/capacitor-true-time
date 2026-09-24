@@ -14,7 +14,7 @@ Version 2.0.0 replaces the `TrueTime.getTime()` API from 1.x with `RawNtp.reques
 ## Install
 
 ```sh
-npm install @trinitiwowka/capacitor-true-time@^2.0.0
+npm install @trinitiwowka/capacitor-true-time@^2.0.1
 npx cap sync
 ```
 
