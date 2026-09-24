@@ -1,19 +1,17 @@
 {
   "name": "@trinitiwowka/capacitor-true-time",
-  "version": "1.0.3",
-  "description": "Native NTP time synchronization for Capacitor 8 on iOS and Android",
-  "main": "dist/plugin.cjs.js",
+  "version": "2.0.0",
+  "description": "Raw UDP NTP packet exchange for Capacitor 8 on iOS and Android",
+  "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
-  "unpkg": "dist/plugin.js",
   "files": [
+    "dist/",
     "android/src/main/",
     "android/build.gradle",
-    "dist/",
-    "ios/Sources",
-    "ios/Vendor/TrueTime",
+    "ios/Sources/",
     "Package.swift",
-    "TrinitiwowkaCapacitorTrueTime.podspec"
+    "CapacitorRawNtp.podspec"
   ],
   "author": "Denys Galkin <trinitiwowka@gmail.com>",
   "license": "MIT",
@@ -28,50 +26,25 @@
     "capacitor",
     "capacitor-plugin",
     "ntp",
-    "sntp",
+    "udp",
     "time",
-    "time-synchronization",
     "ios",
     "android"
   ],
   "scripts": {
-    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "xcodebuild -scheme TrinitiwowkaCapacitorTrueTime -destination generic/platform=iOS",
-    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "build": "tsc",
     "verify:web": "npm run build",
-    "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
-    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
-    "eslint": "eslint . --ext ts",
-    "prettier": "prettier \"**/*.{css,html,ts,js,java}\" --plugin=prettier-plugin-java",
-    "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api TrueTimePlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
-    "clean": "rimraf ./dist",
-    "watch": "tsc --watch",
+    "verify:android": "cd android && ./gradlew clean build",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@capacitor/android": "^8.0.0",
     "@capacitor/core": "^8.0.0",
-    "@capacitor/docgen": "^0.3.1",
     "@capacitor/ios": "^8.0.0",
-    "@ionic/eslint-config": "^0.4.0",
-    "@ionic/prettier-config": "^4.0.0",
-    "@ionic/swiftlint-config": "^2.0.0",
-    "eslint": "^8.57.1",
-    "prettier": "^3.6.2",
-    "prettier-plugin-java": "^2.7.7",
-    "rimraf": "^6.1.0",
-    "rollup": "^4.53.2",
-    "swiftlint": "^2.0.0",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0"
-  },
-  "prettier": "@ionic/prettier-config",
-  "eslintConfig": {
-    "extends": "@ionic/eslint-config/recommended"
   },
   "capacitor": {
     "ios": {
@@ -87,8 +60,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.53.2"
   }
 }

@@ -1,13 +1,9 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { TrueTimeImplementationInfo, TrueTimePlugin, TrueTimeResult } from './definitions';
+import type { NtpRawResponse, RawNtpPlugin } from './definitions';
 
-export class TrueTimeWeb extends WebPlugin implements TrueTimePlugin {
-  async getTime(): Promise<TrueTimeResult> {
-    throw this.unavailable('Native SNTP is available only on iOS and Android');
-  }
-
-  async getImplementationInfo(): Promise<TrueTimeImplementationInfo> {
-    throw this.unavailable('Native SNTP is available only on iOS and Android');
+export class RawNtpWeb extends WebPlugin implements RawNtpPlugin {
+  async request(): Promise<NtpRawResponse> {
+    throw this.unavailable('UDP sockets are not available in browsers.');
   }
 }

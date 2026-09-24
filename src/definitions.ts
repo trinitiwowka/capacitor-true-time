@@ -1,48 +1,32 @@
-/** Options for native NTP time synchronization. */
-export interface TrueTimeOptions {
-  /** DNS name or IP address of an NTP server. */
-  host: string;
-  /** Android query timeout in milliseconds, clamped to 500...10000. iOS uses TrueTime.swift's default timeout. */
-  timeoutMs?: number;
+export interface NtpRequestOptions {
+  /** NTP server hostname or IP. Default: "pool.ntp.org" */
+  host?: string;
+  /** UDP port. Default: 123 */
+  port?: number;
+  /** Milliseconds to wait for the reply. Default: 5000 */
+  timeout?: number;
+  /**
+   * Optional: base64 of the exact bytes to send.
+   * Default: 48-byte SNTP client request (0x1B followed by 47 zero bytes).
+   */
+  requestPacket?: string;
 }
 
-/** Identity returned by the native implementation. */
-export interface TrueTimeImplementationInfo {
-  implementation: '@trinitiwowka/capacitor-true-time';
-  implementationVersion: '1.0.3';
-  signature: 'capacitor-true-time-native-sntp-v1';
-  protocol: 'NTPv3' | 'SNTPv4';
-}
-
-/** Corrected UTC and legacy-compatible timestamps in Unix milliseconds. */
-export interface TrueTimeResult extends TrueTimeImplementationInfo {
-  /** Corrected UTC time at callback on iOS or packet receipt on Android. */
-  callback: number;
-  /** Client request transmission time. */
-  t0: number;
-  /** Server request receipt time on Android; corrected callback time on iOS. */
+export interface NtpRawResponse {
+  /** UDP payload exactly as received from the server, base64 encoded. */
+  packet: string;
+  /** IP address of the server that replied. */
+  address: string;
+  /** T1: device wall clock (Unix epoch ms) captured immediately before send. */
   t1: number;
-  /** Server response transmission time on Android; corrected callback time on iOS. */
-  t2: number;
-  /** Client response receipt time. */
-  t3: number;
-  /** Network round-trip delay on Android; half the native call duration on iOS, matching the old plugin. */
-  delay: number;
-  /** Estimated local-clock offset from the server. */
-  offset: number;
-  /** Server root delay from its primary reference clock. */
-  rootDelay?: number;
-  /** Server root dispersion from its primary reference clock. */
-  rootDispersion?: number;
-  host: string;
-  stratum?: number;
-  leap?: number;
+  /** T4: device wall clock (Unix epoch ms) captured immediately after receive. */
+  t4: number;
+  /** Monotonic clock (ns) captured at the same moment as t1. Use with t4Mono for the round-trip interval. */
+  t1Mono: number;
+  /** Monotonic clock (ns) captured at the same moment as t4. */
+  t4Mono: number;
 }
 
-export interface TrueTimePlugin {
-  /** Get corrected time from the original TrueTime.swift client on iOS or an SNTP sample on Android. */
-  getTime(options: TrueTimeOptions): Promise<TrueTimeResult>;
-
-  /** Return stable identifiers for the native code loaded by Capacitor. */
-  getImplementationInfo(): Promise<TrueTimeImplementationInfo>;
+export interface RawNtpPlugin {
+  request(options?: NtpRequestOptions): Promise<NtpRawResponse>;
 }
