@@ -1,12 +1,3 @@
-## Created with Capacitor Create App
+# Raw NTP example app
 
-This app was created using [`@capacitor/create-app`](https://github.com/ionic-team/create-capacitor-app),
-and comes with a very minimal shell for building an app.
-
-### Running this example
-
-To run the provided example, you can use `npm start` command.
-
-```bash
-npm start
-```
+This Capacitor app exercises `RawNtp.request()` on a device. Install dependencies from this directory, start Vite, or use `npx cap sync` and open the iOS or Android project. The browser displays an `unavailable` error because UDP sockets require a native platform.

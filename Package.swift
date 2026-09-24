@@ -2,33 +2,23 @@
 import PackageDescription
 
 let package = Package(
-    name: "TrinitiwowkaCapacitorTrueTime",
-    platforms: [.iOS(.v15)],
+    name: "CapacitorRawNtp",
+    platforms: [.iOS(.v14)],
     products: [
-        .library(
-            name: "TrinitiwowkaCapacitorTrueTime",
-            targets: ["TrueTimePlugin"])
+        .library(name: "CapacitorRawNtp", targets: ["RawNtpPlugin"])
     ],
     dependencies: [
+        // Match your app's Capacitor major version
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0")
     ],
     targets: [
         .target(
-            name: "CTrueTime",
-            path: "ios/Vendor/TrueTime/Sources/CTrueTime",
-            publicHeadersPath: "."),
-        .target(
-            name: "TrueTime",
-            dependencies: ["CTrueTime"],
-            path: "ios/Vendor/TrueTime/Sources",
-            exclude: ["CTrueTime"]),
-        .target(
-            name: "TrueTimePlugin",
+            name: "RawNtpPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
-                .product(name: "Cordova", package: "capacitor-swift-pm"),
-                "TrueTime"
+                .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/TrueTimePlugin")
+            path: "ios/Sources/RawNtpPlugin"
+        )
     ]
 )

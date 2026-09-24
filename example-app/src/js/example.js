@@ -1,6 +1,11 @@
-import { TrueTime } from '@trinitiwowka/capacitor-true-time';
+import { RawNtp } from '@trinitiwowka/capacitor-true-time';
 
-window.testEcho = () => {
-    const inputValue = document.getElementById("echoInput").value;
-    TrueTime.echo({ value: inputValue })
-}
+const result = document.querySelector('#result');
+document.querySelector('#requestNtp').addEventListener('click', async () => {
+  try {
+    const host = document.querySelector('#ntpHost').value;
+    result.textContent = JSON.stringify(await RawNtp.request({ host, timeout: 3000 }), null, 2);
+  } catch (error) {
+    result.textContent = String(error);
+  }
+});
